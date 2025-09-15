@@ -212,7 +212,7 @@ a:hover { text-decoration: underline; }
 .awards .date { font-family: "Space Mono", monospace; color: var(--muted); margin-right: 6px; }
 
 /* ========================================
-   Personal pages: Tennis & Travel
+   Personal pages: Photo Galleries
 ======================================== */
 .personal {
   position: relative;
@@ -221,12 +221,15 @@ a:hover { text-decoration: underline; }
     linear-gradient(var(--bg), var(--bg));
 }
 
-.tennis-grid {
+.personal-grid {
   display: grid;
   grid-template-columns: minmax(260px, 360px) 1fr;
   gap: 32px;
 }
-.tennis-text { color: var(--muted); }
+.personal-text {
+  color: var(--muted);
+  min-width: 0; /* Allows this grid item to shrink, forcing text to wrap */
+}
 
 .photos .polaroid {
   --base-rot: 0deg; --rx: 0deg; --ry: 0deg; --ty: 0;
@@ -241,38 +244,22 @@ a:hover { text-decoration: underline; }
 .photos .polaroid figcaption { text-align: center; margin-top: 10px; font-size: 13px; color: #2a2d3a; }
 .photos .polaroid:hover { --ty: -4px; box-shadow: 0 16px 36px rgba(0,0,0,.12); }
 
-/* Overlapping row of polaroids (tennis) */
-.tennis-photos { --overlap: -44px; display: flex !important; gap: 0; align-items: flex-start; isolation: isolate; }
-.tennis-photos .polaroid { position: relative; margin-left: 0; transition: transform .22s ease, box-shadow .22s ease; }
-.tennis-photos .polaroid + .polaroid { margin-left: var(--overlap); }
-.tennis-photos .polaroid:hover { z-index: 3; transform: translateY(-6px) rotate(var(--base-rot,0deg)) scale(1.02); box-shadow: 0 12px 36px rgba(0,0,0,.18); }
-
 /* Size utilities */
 .polaroid.is-sm { --w: 240px; }
 .polaroid.is-md { --w: 300px; }
 .polaroid.is-lg { --w: 360px; }
-.tennis-photos .polaroid { width: var(--w, 300px); }
 
-/* Travel grid and overlapped rows */
-.travel-grid {
-  display: grid;
-  grid-template-columns: minmax(260px, 360px) 1fr;
-  gap: 32px;
-}
-.travel-rows { --row-overlap: -140px; --bottom-shift: 0px; gap: 0; }
-.travel-photos { --w: 320px; }
-.travel-photos .polaroid { width: var(--w, 320px); flex: 0 0 var(--w, 320px); }
-.travel-photos.top { --overlap: -36px; display: flex; gap: 0; flex-wrap: nowrap; align-items: flex-start; isolation: isolate; }
-.travel-photos.top .polaroid + .polaroid { margin-left: var(--overlap); }
-.travel-photos.bottom { display: flex; justify-content: center; margin-top: var(--row-overlap); }
-.travel-photos.bottom .polaroid { position: relative; left: var(--bottom-shift); }
-.travel-photos.top .polaroid { z-index: 2; }
-.travel-photos.bottom .polaroid { z-index: 1; }
-.travel-photos .polaroid:hover { z-index: 5; transform: translateY(-6px) rotate(var(--base-rot,0deg)) scale(1.02); }
-.travel-text {
-  color: var(--muted);
-  min-width: 0; /* Allows this grid item to shrink, forcing text to wrap */
-}
+/* Photo row layouts */
+.photo-rows { --row-overlap: -140px; --bottom-shift: 0px; gap: 0; }
+.photo-row .polaroid { width: var(--w, 320px); flex: 0 0 var(--w, 320px); }
+.photo-row.top { --overlap: -36px; display: flex; gap: 0; flex-wrap: nowrap; align-items: flex-start; isolation: isolate; }
+.photo-row.top .polaroid + .polaroid { margin-left: var(--overlap); }
+.photo-row.bottom { display: flex; justify-content: center; margin-top: var(--row-overlap); }
+.photo-row.bottom .polaroid { position: relative; left: var(--bottom-shift); }
+.photo-row.top .polaroid { z-index: 2; }
+.photo-row.bottom .polaroid { z-index: 1; }
+.photo-row .polaroid:hover { z-index: 5; transform: translateY(-6px) rotate(var(--base-rot,0deg)) scale(1.02); }
+
 
 /* Personal page hero centering */
 .page-personal .hero-grid {
@@ -345,44 +332,21 @@ a:hover { text-decoration: underline; }
     margin: 0 auto 36px;
   }
 
-  .tennis-grid,
-  .travel-grid {
+  .personal-grid {
     grid-template-columns: 1fr;
     align-items: start;
   }
 
   /* --- START: MOBILE PHOTO GALLERY UPDATES --- */
 
-  /* --- TENNIS: Static, proportionally scaling collage --- */
-  .tennis-photos {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding-block: 12px;
-    overflow: hidden;
-    flex-wrap: nowrap;
-    left: 4%;
-  }
-
-  .tennis-photos .polaroid {
-    flex-shrink: 0;
-    width: 35%;
-    max-width: none;
-  }
-
-  .tennis-photos .polaroid + .polaroid {
-    margin-left: -10%;
-  }
-
-  /* --- TRAVEL: Bigger, proportional, overlapping photos --- */
-  .travel-rows {
+  .photo-rows {
     --row-overlap: -150px; /* Overlap amount */
     display: flex;
     flex-direction: column;
     gap: 0;
   }
 
-  .travel-photos {
+  .photo-row {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -391,11 +355,11 @@ a:hover { text-decoration: underline; }
     position: relative;
   }
 
-  .travel-photos.bottom {
+  .photo-row.bottom {
     margin-top: var(--row-overlap); /* Apply vertical overlap */
   }
 
-  .travel-photos .polaroid {
+  .photo-row .polaroid {
     width: 40%; /* Make photos bigger, creating a 2-column effect */
     max-width: none; /* Let them scale freely */
     position: relative;
@@ -404,20 +368,20 @@ a:hover { text-decoration: underline; }
   }
 
   /* Make the single photo on the bottom row slightly larger to fill space */
-  .travel-photos.bottom .polaroid {
+  .photo-row.bottom .polaroid {
     width: 40%;
   }
 
   /* Ensure top row photos are stacked on top */
-  .travel-photos.top .polaroid {
+  .photo-row.top .polaroid {
     z-index: 2;
   }
-  .travel-photos.bottom .polaroid {
+  .photo-row.bottom .polaroid {
     z-index: 1;
   }
 
   /* Reset horizontal margin from desktop styles */
-  .travel-photos .polaroid + .polaroid {
+  .photo-row .polaroid + .polaroid {
     margin-left: 0;
   }
 
