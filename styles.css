@@ -1,0 +1,297 @@
+/* ========================================
+   Base tokens & reset
+======================================== */
+:root {
+  --bg: #fbfbfd;
+  --paper: #ffffff;
+  --ink: #062159;
+  --muted: #062159;
+  --accent: #154aa4;
+  --line: #eceff7;
+  --glow: 0 10px 30px rgba(0,0,0,.06);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ========================================
+   Header / Navigation
+======================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: saturate(140%) blur(10px);
+}
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in oklab, var(--bg) 86%, transparent);
+}
+.nav-links {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-links a { color: var(--muted); font-weight: 500; }
+.nav-links a:hover,
+.nav-links a.is-active,
+.nav-links a.is-current { color: var(--ink); }
+
+.nav-toggle { display: none; background: none; border: none; }
+.nav-toggle .hamb {
+  display: inline-block;
+  width: 22px;
+  height: 2px;
+  background: var(--ink);
+  position: relative;
+}
+.nav-toggle .hamb::before,
+.nav-toggle .hamb::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 22px;
+  height: 2px;
+  background: var(--ink);
+}
+.nav-toggle .hamb::before { top: -6px; }
+.nav-toggle .hamb::after  { top: 6px; }
+
+/* ========================================
+   Sections & Layout
+======================================== */
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+.section h2 {
+  font-family: Roboto, serif;
+  font-weight: 700;
+  letter-spacing: .2px;
+  font-size: 28px;
+  margin: 0 0 6px;
+}
+
+/* ========================================
+   Hero
+======================================== */
+.hero { padding-top: 84px; }
+.hero-title {
+  font-family: Roboto, serif;
+  font-size: 48px;
+  line-height: 1.05;
+  margin: 0 0 8px;
+}
+
+/* ========================================
+   Personal Page Styles
+======================================== */
+.page-personal .hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+.page-personal .hero-title { text-align: center; }
+
+.personal {
+  position: relative;
+  background:
+    radial-gradient(1200px 250px at 50% -40%, color-mix(in oklab, var(--paper) 94%, var(--bg)), transparent 70%),
+    linear-gradient(var(--bg), var(--bg));
+}
+
+.tennis-grid,
+.travel-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 360px) 1fr;
+  gap: 32px;
+}
+
+.tennis-text,
+.travel-text { color: var(--muted); }
+.travel-text { min-width: 0; }
+
+/* --- Photo & Polaroid Styles --- */
+.photos .polaroid {
+  --base-rot: 0deg; --rx: 0deg; --ry: 0deg; --ty: 0;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  padding: 10px 10px 16px;
+  transform: rotate(var(--base-rot)) rotateX(var(--rx)) rotateY(var(--ry)) translateY(var(--ty));
+  transform-style: preserve-3d;
+  transition: box-shadow .25s ease, transform .25s ease;
+}
+.photos .polaroid:hover {
+  --ty: -4px;
+  box-shadow: 0 16px 36px rgba(0,0,0,.12);
+}
+.photos .polaroid img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+}
+.photos .polaroid figcaption {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #2a2d3a;
+}
+.polaroid.is-sm { --w: 240px; }
+.polaroid.is-md { --w: 300px; }
+.polaroid.is-lg { --w: 360px; }
+
+/* --- Tennis Photo Layout --- */
+.tennis-photos {
+  --overlap: -44px;
+  display: flex !important;
+  align-items: flex-start;
+  isolation: isolate;
+}
+.tennis-photos .polaroid {
+  width: var(--w, 300px);
+  position: relative;
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.tennis-photos .polaroid + .polaroid { margin-left: var(--overlap); }
+.tennis-photos .polaroid:hover {
+  z-index: 3;
+  transform: translateY(-6px) rotate(var(--base-rot,0deg)) scale(1.02);
+  box-shadow: 0 12px 36px rgba(0,0,0,.18);
+}
+
+/* --- Travel Photo Layout --- */
+.travel-rows { --row-overlap: -140px; }
+.travel-photos .polaroid { width: var(--w, 320px); flex: 0 0 var(--w, 320px); }
+
+.travel-photos.top {
+  --overlap: -36px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  isolation: isolate;
+}
+.travel-photos.top .polaroid + .polaroid { margin-left: var(--overlap); }
+.travel-photos.bottom {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--row-overlap);
+}
+.travel-photos.top .polaroid { z-index: 2; }
+.travel-photos.bottom .polaroid { z-index: 1; }
+.travel-photos .polaroid:hover {
+  z-index: 5;
+  transform: translateY(-6px) rotate(var(--base-rot,0deg)) scale(1.02);
+}
+
+/* ========================================
+   Responsive
+======================================== */
+@media (max-width: 900px) {
+  /* --- Mobile Navigation --- */
+  .nav-links { display: none; }
+  .nav {
+    position: relative;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+  .nav-toggle {
+    display: inline-flex;
+    width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    border-radius: 8px;
+  }
+  .nav.open .nav-links {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 58px;
+    left: 20px;
+    background: var(--paper);
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--glow);
+    min-width: 200px;
+    max-width: 80vw;
+    align-items: stretch;
+  }
+  .nav-links a {
+    display: block;
+    padding: 8px 10px;
+    text-align: left;
+  }
+
+  /* --- Mobile Layouts --- */
+  .tennis-grid,
+  .travel-grid {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  /* --- Mobile Photo Galleries --- */
+  .tennis-photos {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-block: 12px;
+    overflow: hidden;
+    flex-wrap: nowrap;
+    left: 4%;
+  }
+  .tennis-photos .polaroid {
+    flex-shrink: 0;
+    width: 35%;
+    max-width: none;
+  }
+  .tennis-photos .polaroid + .polaroid { margin-left: -10%; }
+
+  .travel-rows {
+    --row-overlap: -150px;
+    display: flex;
+    flex-direction: column;
+  }
+  .travel-photos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    position: relative;
+  }
+  .travel-photos.bottom { margin-top: var(--row-overlap); }
+  .travel-photos .polaroid {
+    width: 40%;
+    max-width: none;
+    flex-basis: auto;
+  }
+  .travel-photos.top .polaroid { z-index: 2; }
+  .travel-photos.bottom .polaroid { z-index: 1; }
+  .travel-photos .polaroid + .polaroid { margin-left: 0; }
+  .photos .polaroid figcaption { font-size: 12px; }
+}
